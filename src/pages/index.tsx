@@ -1,23 +1,42 @@
 import api from '@/api'
 import { Todo } from '@/models/Todo'
+import { TodoList } from '@/components/TodoList'
+import { Input } from 'antd'
+import { SearchOutlined } from '@ant-design/icons'
+import { useEffect, useState } from 'react'
 
 type HomePageProps = {
   todos: Todo[]
 }
 
 export default function Home({ todos }: HomePageProps) {
-  console.log(todos)
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(
+    todos
+      .sort((a, b) => b.priority - a.priority)
+      .sort((a, b) => Number(a.completed) - Number(b.completed))
+  )
+
+  const filterTodosByKeyword = (keyword: string): void => {
+    setFilteredTodos(
+      todos.filter((todo: Todo) =>
+        todo?.title.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())
+      )
+    )
+  }
+
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
-      <div className="flex flex-col gap-2">
-        {todos.map((todo: Todo) => {
-          return (
-            <div className="flex flex-col gap-2 justify-center p-2 h-max w-max rounded bg-white shadow-inner shadow-white">
-              <h1 className="font-bold">{todo.title}</h1>
-              <span>{todo.description}</span>
-            </div>
-          )
-        })}
+    <div className="flex flex-col items-center w-screen h-screen">
+      <h1 className="font-mono text-[40px] mt-[50px] mb-[60px]">TODO LIST</h1>
+      <div className="flex flex-col w-full max-w-[500px] gap-4">
+        <Input
+          size="large"
+          placeholder="Pesquise pelo título da sua tarefa"
+          prefix={<SearchOutlined />}
+          onChange={(ev) => {
+            filterTodosByKeyword(ev.target.value)
+          }}
+        />
+        <TodoList todos={filteredTodos} />
       </div>
     </div>
   )
