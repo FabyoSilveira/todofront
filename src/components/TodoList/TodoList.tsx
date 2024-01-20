@@ -1,8 +1,10 @@
+import { useRouter } from 'next/router'
+import Swal from 'sweetalert2'
+
 import { Todo } from '@/models/Todo'
 import { TodoCard } from '@/components/TodoCard'
 import { TodoListStyle } from './TodoList.style'
 import { completeTodo, deleteTodo } from '@/service/TodoService'
-import { useRouter } from 'next/router'
 
 export type TodoListProps = {
   todos: Todo[]
@@ -29,23 +31,37 @@ export const TodoList = ({
               createDate={todo.createdAt}
               completed={todo.completed}
               onComplete={async () => {
-                const res = await completeTodo({
-                  id: todo.id,
-                  title: todo.title,
-                  description: todo.description,
-                  createdAt: todo.createdAt,
-                  priority: todo.priority,
-                  completed: true,
+                Swal.fire({
+                  title: 'Completar tarefa?',
+                  showCancelButton: true,
+                  confirmButtonText: 'Sim',
+                  cancelButtonText: 'Cancelar',
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    const res = await completeTodo({
+                      id: todo.id,
+                      title: todo.title,
+                      description: todo.description,
+                      createdAt: todo.createdAt,
+                      priority: todo.priority,
+                      completed: true,
+                    })
+                    refreshList(todo.id)
+                  }
                 })
-
-                console.log(res)
-                refreshList(todo.id)
               }}
               onDelete={async () => {
-                const res = await deleteTodo(todo.id)
-
-                console.log(res)
-                refreshList(todo.id)
+                Swal.fire({
+                  title: 'Excluir tarefa?',
+                  showCancelButton: true,
+                  confirmButtonText: 'Sim',
+                  cancelButtonText: 'Cancelar',
+                }).then(async (result) => {
+                  if (result.isConfirmed) {
+                    const res = await deleteTodo(todo.id)
+                    refreshList(todo.id)
+                  }
+                })
               }}
               onEdit={() => {
                 router.push(`/edit-todo/${todo.id}`)
