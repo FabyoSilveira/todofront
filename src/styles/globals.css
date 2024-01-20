@@ -10,7 +10,7 @@ body {
   padding: 0px;
   margin: 0px;
   overflow-x: hidden;
-  background-color: #e2e8f0;
+  background-color: #f8fafc;
 
   ::-webkit-scrollbar {
     width: 4px;

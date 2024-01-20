@@ -4,30 +4,45 @@ import {
   TodoBadgeTextStyle,
   TodoCardStyle,
 } from './TodoCard.style'
-import { Badge } from 'antd'
+import { Badge, Button, Tooltip } from 'antd'
 import { completedBadgeColor, completedBadgeText } from './TodoCard.util'
-import { FireFilled } from '@ant-design/icons'
+import {
+  CheckOutlined,
+  CloseOutlined,
+  EditFilled,
+  FireFilled,
+} from '@ant-design/icons'
 
 export type TodoCardProps = {
+  id: string
   title: string
   description: string
   createDate: string
   priority: 1 | 2 | 3
   completed: boolean
+  onComplete: () => void
+  onDelete: () => void
+  onEdit: () => void
 }
 
 export const TodoCard = ({
+  id,
   title,
   description,
   createDate,
   priority,
   completed,
+  onComplete,
+  onDelete,
+  onEdit,
 }: TodoCardProps): JSX.Element => {
   const getPriorityIcons = (priority: 1 | 2 | 3): any[] => {
     const icons = []
 
     for (var i = 0; i < priority; i++) {
-      icons.push(<FireFilled className={PriorityIconColor({ priority })} />)
+      icons.push(
+        <FireFilled key={i} className={PriorityIconColor({ priority })} />
+      )
     }
 
     return icons
@@ -54,6 +69,38 @@ export const TodoCard = ({
         </div>
 
         <span>{description}</span>
+        <div className="flex justify-between h-max w-full mt-2">
+          {!completed ? (
+            <>
+              <Tooltip title="Editar">
+                <Button
+                  shape="circle"
+                  icon={<EditFilled />}
+                  style={{ color: '#ca8a04', borderColor: '#ca8a04' }}
+                  onClick={onEdit}
+                />
+              </Tooltip>
+              <Tooltip title="Completar">
+                <Button
+                  shape="circle"
+                  icon={<CheckOutlined />}
+                  style={{ color: '#a3e635', borderColor: '#a3e635' }}
+                  onClick={onComplete}
+                />
+              </Tooltip>
+            </>
+          ) : (
+            <></>
+          )}
+          <Tooltip title="Excluir">
+            <Button
+              shape="circle"
+              icon={<CloseOutlined />}
+              style={{ color: '#ef4444', borderColor: '#ef4444' }}
+              onClick={onDelete}
+            />
+          </Tooltip>
+        </div>
       </div>
     </Badge.Ribbon>
   )
