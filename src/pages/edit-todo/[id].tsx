@@ -24,7 +24,7 @@ export default function CreateTodo() {
 
   useEffect(() => {
     fetchTodo()
-  }, [id, fetchTodo])
+  }, [id])
 
   const todoForm = useFormik({
     initialValues: {
