@@ -23,3 +23,5 @@ Then navigate to the root project directory and run the following command:
 After the installation, to run the application locally, use the following command:
 
 - npm run dev
+
+The application will be accessible at http://localhost:3000.
